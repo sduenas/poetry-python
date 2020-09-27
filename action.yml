@@ -1,0 +1,21 @@
+name: 'Poetry Python Action'
+description: 'Install and configure Poetry in your workflow'
+inputs:
+  python-version:
+    description: 'Python version'
+    required: true
+    default: '3.6'
+runs:
+  using: "composite"
+  steps:
+    - name: Install Python ${{ inputs.python-version }} dependencies
+      shell: bash
+      run: |
+        pip install --upgrade pip
+        pip install wheel
+    - name: Install Poetry ${{ inputs.python-version }}
+      shell: bash
+      run: |
+        curl -O -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py
+        python get-poetry.py -y --preview
+        echo "::set-env name=PATH::$HOME/.poetry/bin:$PATH"
